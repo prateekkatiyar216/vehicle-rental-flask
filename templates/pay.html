@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Complete Payment</h2>
+
+<button id="rzp-button">Pay Now</button>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "{{ key }}",
+        "amount": "{{ amount }}",
+        "currency": "INR",
+        "order_id": "{{ order.id }}",
+        "name": "RentMyRide",
+        "description": "Vehicle Booking Payment",
+        "handler": function (response) {
+
+            fetch("/payment_success", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    booking_id: "{{ booking_id }}"
+                })
+            })
+                .then(res => {
+                    if (res.ok) {
+                        window.location.href = "/my_bookings";
+                    } else {
+                        alert("Payment recorded but server error!");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Payment Failed (server error)");
+                });
+        },
+        "modal": {
+            "ondismiss": function () {
+                alert("Payment cancelled");
+            }
+        }
+    };
+
+    var rzp = new Razorpay(options);
+    document.getElementById('rzp-button').onclick = function (e) {
+        rzp.open();
+        e.preventDefault();
+    }
+</script>
+
+{% endblock %}

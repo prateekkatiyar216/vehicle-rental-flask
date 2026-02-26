@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>RentMyRide</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🚗 RentMyRide</div>
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/my_bookings">My Bookings</a>
+            <a href="/owner_bookings">Owner Panel</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+
+</html>

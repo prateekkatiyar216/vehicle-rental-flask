@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-8">
+    <h2 class="text-3xl font-bold text-gray-900">
+        Available Vehicles 🚗
+    </h2>
+
+    <a href="/add_vehicle">
+        <button class="px-6 py-3 rounded-xl bg-purple-600 text-white font-semibold
+                   hover:bg-purple-700 transition shadow-md">
+            + Add Vehicle
+        </button>
+    </a>
+</div>
+
+<!-- Vehicle Grid -->
+<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+
+    {% for v in vehicles %}
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition">
+
+        <!-- Vehicle Image -->
+        <div class="relative">
+            <img src="/uploads/{{ v[6] }}" alt="Vehicle Image" class="w-full h-48 object-cover" />
+
+            <!-- Availability Badge -->
+            {% if v[9] == 1 %}
+            <span class="absolute top-3 right-3 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                🔴 Booked
+            </span>
+            {% else %}
+            <span class="absolute top-3 right-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                🟢 Available
+            </span>
+            {% endif %}
+        </div>
+
+        <!-- Card Content -->
+        <div class="p-5 space-y-3">
+
+            <!-- Title + Rating -->
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-800">
+                    <a href="/vehicle/{{ v[0] }}" class="hover:text-purple-600">
+                        {{ v[2] }}
+                    </a>
+                </h3>
+
+                {% if v[7] %}
+                <span class="text-sm text-yellow-500 font-semibold">
+                    ⭐ {{ v[7] }}
+                </span>
+                {% else %}
+                <span class="text-xs text-gray-400">
+                    No ratings
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Reviews -->
+            {% if v[8] > 0 %}
+            <a href="/vehicle/{{ v[0] }}#reviews" class="text-sm text-purple-600 hover:underline">
+                📝 {{ v[8] }} reviews
+            </a>
+            {% endif %}
+
+            <!-- Info -->
+            <p class="text-sm text-gray-600">
+                <b>Type:</b> {{ v[3] }}
+            </p>
+
+            <p class="text-xl font-bold text-purple-600">
+                ₹{{ v[4] }} <span class="text-sm font-normal text-gray-500">/ day</span>
+            </p>
+
+            <p class="text-sm text-gray-600">
+                <b>Location:</b> {{ v[5] }}
+            </p>
+
+            <!-- Booking Section -->
+            {% if v[9] == 0 %}
+            <form method="POST" action="/book/{{ v[0] }}" class="space-y-3 pt-3">
+                <div class="flex gap-2">
+                    <input type="date" name="start_date" required
+                        class="w-1/2 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500" />
+                    <input type="date" name="end_date" required
+                        class="w-1/2 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500" />
+                </div>
+
+                <button type="submit" class="w-full py-2 rounded-xl bg-purple-600 text-white font-semibold
+                           hover:bg-purple-700 transition shadow-md">
+                    Book Now
+                </button>
+            </form>
+            {% else %}
+            <button disabled
+                class="w-full mt-4 py-2 rounded-xl bg-gray-300 text-gray-600 font-semibold cursor-not-allowed">
+                Not Available
+            </button>
+            {% endif %}
+
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

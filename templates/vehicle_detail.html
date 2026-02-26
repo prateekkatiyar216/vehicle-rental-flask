@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <img src="/uploads/{{ vehicle[6] }}">
+    <h2>{{ vehicle[2] }}</h2>
+    <p><b>Type:</b> {{ vehicle[3] }}</p>
+    <p><b>₹{{ vehicle[4] }}</b> / day</p>
+    <p><b>Location:</b> {{ vehicle[5] }}</p>
+
+    <p><b>Average Rating:</b>
+        {{ avg_rating if avg_rating else "No ratings yet" }} ⭐
+    </p>
+</div>
+
+<hr>
+
+<h3 id="reviews">Reviews</h3>
+
+
+{% for r in reviews %}
+<div class="card">
+    <p><b>{{ r[2] }}</b></p>
+    <p>{{ r[0] }} ⭐</p>
+    <p>{{ r[1] }}</p>
+</div>
+{% endfor %}
+
+<hr>
+
+{% if session.user_id %}
+<h3>Leave a Review</h3>
+<form method="POST" action="/review/{{ vehicle[0] }}">
+    Rating:
+    <select name="rating" required>
+        <option value="5">5 ⭐</option>
+        <option value="4">4 ⭐</option>
+        <option value="3">3 ⭐</option>
+        <option value="2">2 ⭐</option>
+        <option value="1">1 ⭐</option>
+    </select><br><br>
+
+    Comment:<br>
+    <textarea name="comment" required></textarea><br><br>
+
+    <button type="submit">Submit Review</button>
+</form>
+{% endif %}
+
+{% endblock %}

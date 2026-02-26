@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-8">
+    <h2 class="text-3xl font-bold text-gray-900">
+        My Bookings 📅
+    </h2>
+</div>
+
+<!-- Bookings Grid -->
+<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+
+    {% for b in bookings %}
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition">
+
+        <!-- Vehicle Image -->
+        <div class="relative">
+            <img src="/uploads/{{ b[2] }}" alt="Vehicle Image" class="w-full h-48 object-cover" />
+
+            <!-- Payment Status Badge -->
+            {% if b[8] == 'Paid' %}
+            <span class="absolute top-3 right-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                ✅ Paid
+            </span>
+            {% else %}
+            <span class="absolute top-3 right-3 bg-yellow-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                💳 Pending
+            </span>
+            {% endif %}
+        </div>
+
+        <!-- Card Content -->
+        <div class="p-5 space-y-3">
+
+            <!-- Vehicle Name -->
+            <h3 class="text-lg font-bold text-gray-800">
+                <a href="/vehicle/{{ b[0] }}" class="hover:text-purple-600">
+                    {{ b[1] }}
+                </a>
+            </h3>
+
+            <!-- Info -->
+            <p class="text-sm text-gray-600">
+                <b>Location:</b> {{ b[3] }}
+            </p>
+
+            <p class="text-xl font-bold text-purple-600">
+                ₹{{ b[4] }} <span class="text-sm font-normal text-gray-500">/ day</span>
+            </p>
+
+            <p class="text-sm text-gray-600">
+                <b>Booking:</b> {{ b[5] }} → {{ b[6] }}
+            </p>
+
+            <!-- Booking Status -->
+            <p class="text-sm">
+                <b>Status:</b>
+                {% if b[7] == 'Approved' %}
+                <span class="text-green-600 font-semibold">Approved</span>
+                {% elif b[7] == 'Rejected' %}
+                <span class="text-red-600 font-semibold">Rejected</span>
+                {% else %}
+                <span class="text-yellow-600 font-semibold">{{ b[7] }}</span>
+                {% endif %}
+            </p>
+
+            <!-- Action -->
+            {% if b[7] == 'Approved' and b[8] != 'Paid' %}
+            <a href="/pay/{{ b[0] }}" class="block w-full text-center py-2 mt-3 rounded-xl
+                       bg-purple-600 text-white font-semibold
+                       hover:bg-purple-700 transition shadow-md">
+                Pay Now
+            </a>
+            {% endif %}
+
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-8">
+    <h2 class="text-3xl font-bold text-gray-900">
+        Bookings for My Vehicles 🧾
+    </h2>
+</div>
+
+<!-- Bookings Grid -->
+<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+
+    {% for b in bookings %}
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition">
+
+        <!-- Card Header -->
+        <div class="p-5 border-b">
+            <h3 class="text-lg font-bold text-gray-800">
+                {{ b[1] }}
+            </h3>
+        </div>
+
+        <!-- Card Body -->
+        <div class="p-5 space-y-3 text-sm text-gray-700">
+
+            <p>
+                <b>Renter:</b> {{ b[2] }}
+            </p>
+
+            <p>
+                <b>Dates:</b> {{ b[3] }} → {{ b[4] }}
+            </p>
+
+            <!-- Booking Status -->
+            <p>
+                <b>Booking Status:</b>
+                {% if b[5] == 'Approved' %}
+                <span
+                    class="ml-2 inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                    ✔ Approved
+                </span>
+                {% elif b[5] == 'Rejected' %}
+                <span class="ml-2 inline-block bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
+                    ✖ Rejected
+                </span>
+                {% else %}
+                <span
+                    class="ml-2 inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold">
+                    ⏳ Pending
+                </span>
+                {% endif %}
+            </p>
+
+            <!-- Payment Status -->
+            <p>
+                <b>Payment Status:</b>
+                {% if b[6] == 'Paid' %}
+                <span
+                    class="ml-2 inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                    💳 Paid
+                </span>
+                {% else %}
+                <span class="ml-2 inline-block bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
+                    ⌛ Not Paid
+                </span>
+                {% endif %}
+            </p>
+
+            <!-- Actions -->
+            {% if b[5] == 'Pending' %}
+            <form method="POST" action="/update_booking/{{ b[0] }}" class="flex gap-3 pt-4">
+                <button name="action" value="Approved" class="flex-1 py-2 rounded-xl bg-green-600 text-white font-semibold
+                           hover:bg-green-700 transition shadow-md">
+                    Approve
+                </button>
+
+                <button name="action" value="Rejected" class="flex-1 py-2 rounded-xl bg-red-600 text-white font-semibold
+                           hover:bg-red-700 transition shadow-md">
+                    Reject
+                </button>
+            </form>
+            {% endif %}
+
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
